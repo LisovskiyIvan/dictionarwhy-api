@@ -7,7 +7,9 @@
   },
   "dependencies": {
     "@elysiajs/cors": "^0.8.0",
-    "elysia": "latest"
+    "axios": "^1.6.7",
+    "elysia": "latest",
+    "googletrans": "^1.0.4"
   },
   "devDependencies": {
     "bun-types": "latest"
