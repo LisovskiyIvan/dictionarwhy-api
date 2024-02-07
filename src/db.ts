@@ -69,12 +69,16 @@ export class WordsDatabase {
         return this.db.query(`SELECT * FROM words WHERE user_id = "${user_id}"`).all()
     }
 
-    async getAllWordsByLanguage(user_id: string, language: string) {
+    async getAllWordsByLanguage(user_id: number, language: string) {
         return this.db.query(`SELECT * FROM words WHERE user_id = "${user_id}" AND language = "${language}"`).all()
     }
 
     async addWord(word: string, translation: string, language: string, user_id: number) {
         return this.db.query('INSERT INTO words (word, translation, language, user_id) VALUES (?, ?, ?, ?) RETURNING word, translation, language, user_id').get(word, translation, language, user_id) as Word
+    }
+
+    async deleteWord(id: number) {
+        return this.db.run(`DELETE FROM words WHERE id = ${id}`)
     }
 
     async init() {

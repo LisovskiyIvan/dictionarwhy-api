@@ -55,12 +55,21 @@ app.use(cors({
     const user = await auth(usersdb, headers)
     if(typeof user == 'string') return user
     const translation: string = await translate(body.word, body.src, body.dest)
-    return wordsdb.addWord(body.word, translation, body.src, user.id as number)
+    return wordsdb.addWord(body.word, translation, body.dest, user.id as number)
   }, {
     body: t.Object({
       word: t.String(),
       src: t.String(),
       dest: t.String()
+    })
+  })
+  .post('/words/all', async ( { usersdb, headers, wordsdb, body }) => {
+    const user = await auth(usersdb, headers)
+    if(typeof user == 'string') return user
+    return wordsdb.getAllWordsByLanguage(user.id as number, body.lang)
+  }, {
+    body: t.Object({
+      lang: t.String()
     })
   })
   .get('/test/:id', ({wordsdb, params})=> wordsdb.getAllWordsByUserId(parseInt(params.id)))
