@@ -66,7 +66,9 @@ app.use(cors({
   .post('/words/all', async ( { usersdb, headers, wordsdb, body }) => {
     const user = await auth(usersdb, headers)
     if(typeof user == 'string') return user
-    return wordsdb.getAllWordsByLanguage(user.id as number, body.lang)
+    const res =  await wordsdb.getAllWordsByLanguage(user.id as number, body.lang)
+    if (res.length == 0) return [{error: 'No words found'}]
+    else return res
   }, {
     body: t.Object({
       lang: t.String()
