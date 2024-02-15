@@ -28,7 +28,7 @@ const app = new Elysia()
 
 app.use(cors({
   origin: true,
-  methods: "*"
+  methods: ["GET", "POST", "DELETE"]
 }))
   .get("/", () => "Hi! This is a Dictionarwhy api.")
   
@@ -74,7 +74,19 @@ app.use(cors({
       lang: t.String()
     })
   })
-  .get('/test/:id', ({wordsdb, params})=> wordsdb.getAllWordsByUserId(parseInt(params.id)))
+  .delete('/words/delete', async ( {usersdb, headers, body, wordsdb } ) => {
+    const user = await auth(usersdb, headers)
+    if(typeof user == 'string') return user
+    wordsdb.deleteWord(user.id as number, body.word)
+    const res =  await wordsdb.getAllWordsByLanguage(user.id as number, body.lang)
+    if (res.length == 0) return [{error: 'No words found'}]
+    else return res
+  }, {
+    body: t.Object({
+      word: t.String(),
+      lang: t.String()
+    })
+  })
 
  
 

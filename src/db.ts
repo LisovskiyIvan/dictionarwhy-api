@@ -77,8 +77,8 @@ export class WordsDatabase {
         return this.db.query('INSERT INTO words (word, translation, language, user_id) VALUES (?, ?, ?, ?) RETURNING word, translation, language, user_id').get(word, translation, language, user_id) as Word
     }
 
-    async deleteWord(id: number) {
-        return this.db.run(`DELETE FROM words WHERE id = ${id}`)
+    async deleteWord(user_id: number, word: string) {
+        return this.db.run(`DELETE FROM words WHERE user_id = "${user_id}" AND word = "${word}"`)
     }
 
     async init() {
