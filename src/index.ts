@@ -29,7 +29,8 @@ const app = new Elysia()
 app.use(cors({
   origin: true,
   methods: ["GET", "POST", "DELETE"]
-}))
+})).group("/api", app => {
+  return app
   .get("/", () => "Hi! This is a Dictionarwhy api.")
   
   .post("/search", async ( { body } )=>{
@@ -87,6 +88,8 @@ app.use(cors({
       lang: t.String()
     })
   })
+})
+  
 
  
 
