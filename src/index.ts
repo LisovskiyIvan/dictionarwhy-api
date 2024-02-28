@@ -27,12 +27,10 @@ const app = new Elysia()
 }).decorate( 'usersdb', new UsersDatabase()).decorate('wordsdb', new WordsDatabase())
 
 app.use(cors({
-  origin: true,
+  origin: /.*\.dictionarwhy\.fun$/,
   methods: ["GET", "POST", "DELETE"]
-})).group("/api", app => {
-  return app
+}))
   .get("/", () => "Hi! This is a Dictionarwhy api.")
-  
   .post("/search", async ( { body } )=>{
     const word = body.data
     const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`).then(res => res.json())
@@ -88,11 +86,6 @@ app.use(cors({
       lang: t.String()
     })
   })
-})
-  
-
- 
-
 
 
 app.listen(8080)
